@@ -1,0 +1,7 @@
+iface eth0 inet static
+address 172.16.1.8
+gateway 172.16.1.1
+netmask 255.255.255.0
+macaddr 5C:26:0A:C0:FF:EE
+phyaddr $FF68
+
