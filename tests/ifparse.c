@@ -169,6 +169,16 @@ struct w51info *ifparse()
     return r;
 }
 
+int prnifnfo(iface)
+struct w51info *iface;
+{
+    printf("iface=(%s)\n", iface->iface);
+    printf("address=(%s)\n", ip2str(iface->address));
+    printf("gateway=(%s)\n", ip2str(iface->gateway));
+    printf("netmask=(%s)\n", ip2str(iface->netmask));
+    printf("macaddr=(%s)\n", mac2str(iface->macaddr));
+}
+
 #ifdef DRIVER
 int main(argc, argv)
 int argc;
@@ -181,11 +191,6 @@ uint8_t *argv;
         printf("Unable to parse interfaces\n");
         exit(1);
     }
-    printf("iface=(%s)\n", iface->iface);
-    printf("address=(%s)\n", ip2str(iface->address));
-    printf("gateway=(%s)\n", ip2str(iface->gateway));
-    printf("netmask=(%s)\n", ip2str(iface->netmask));
-    printf("macaddr=(%s)\n", mac2str(iface->macaddr));
-    printf("phyaddr=(%04x)\n", (unsigned)iface->phyaddr);
+    prnifnfo(iface);
 }
 #endif

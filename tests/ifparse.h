@@ -16,6 +16,7 @@ int parseip();
 char *ip2str();
 char *mac2str();
 int parsemac();
+int prnifnfo();
 struct w51info *ifparse();
 
 #endif

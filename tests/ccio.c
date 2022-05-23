@@ -1,11 +1,14 @@
 #include <stdio.h>
-
-#define DEBUG 1
+#include "ifparse.h"
 
 #define CIO_MR (0xff68)
 #define MR_IND 0x01
 #define MR_AINC 0x02
 #define MR_RST 0x80
+#define CIO_AR (0xff69)
+#define CIO_DR (0xff6b)
+
+
 #define REGSET 1
 #define REGCLR 0
 
@@ -53,46 +56,39 @@ int w51reset()
     return rgstvfy(CIO_MR, MR_RST, REGCLR);
 }
 
+/* w5100_regdump()
+   Dump a set of registers to the card
+   Return: 0 - OK
+*/
+int w51regdmp(src, reg, cnt)
+uint8_t *src;
+uint16_t reg;
+int cnt;
+{
+    *(uint16_t *)CIO_AR = reg;
+    for ( ;cnt; cnt--,src++)
+    {
+#ifdef DEBUG
+        printf("cnt=(%d) d=(%02x)\n", cnt, *src);
+#endif
+        *(uint8_t *)CIO_DR = *src;
+    }
+}
+
 /* w5100_init()
    Setup the W5100 Card
    Return: 0 - OK
 */
-int w51init()
+int w51init(iface)
+struct w51info *iface;
 {
     if ( w51reset() )
         return 1;
     if ( rgstvfy(CIO_MR, MR_IND|MR_AINC, REGSET) )
         return 1;
+    /* Write the interface IP config to the card */
+    w51regdmp(iface, 0x0001, 18);
     return 0;
-}
-
-struct w51info {
-    char iface[8];
-    char address[4];
-    char gateway[4];
-    char netmask[4];
-    char macaddr[6];
-    char *phyaddr;
-};
-struct w51info myw5100;
-
-
-int ifparse()
-{
-    FILE *f;
-    char buf[81],tok[9], data[73];
-    if ( f = fopen("/DD/SYS/interfaces", "r") == NULL )
-    {
-        printf("w5100_ifparse: can't open interfaces file\n");
-        exit(1);
-    }
-    while (!feof(f))
-    {
-        fgets(buf, 80, f);
-        sscanf(buf, "%s %s", tok, data);
-        printf("tok=(%s) data=(%s)\n", tok, data);
-    }
-    fclose(f);
 }
 
 
@@ -101,17 +97,29 @@ int argc;
 char **argv;
 {
     int r;
+    struct w51info *iface;
 
-    printf("Hello, world!\n");
 
-    ifparse();
-    r = w51init();
-    if (r)
+    if (strcmp(argv[1], "-r") == 0)
     {
-        fprintf(stderr, "w5100_init failed\n");
-        return 1;
+        fprintf(stderr, "w5100_reset\n");
+        w51reset();
+    }
+    else if (strcmp(argv[1], "-i") == 0)
+    {
+        iface = ifparse();
+        r = w51init(iface);
+        if (r)
+        {
+            fprintf(stderr, "w5100_init failed\n");
+            return 1;
+        } else {
+            prnifnfo(iface);
+            fprintf(stderr, "w5100_init succeeded\n");
+        }
     } else {
-        fprintf(stderr, "w5100_init succeeded\n");
+        fprintf(stderr, "Usage: -r (Reset) -i (Init)\n");
+        return 1;
     }
 
     return 0;

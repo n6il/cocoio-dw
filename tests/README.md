@@ -1,6 +1,17 @@
-Create a `/DD/SYS/interfaces` file. Build a test program with
+This directory contains W5100 Test Code.  It is designed to be built 
+under NitrOS-9 using the DCC compiler suite.
 
-    dcc -dDRIVER ifparse.c
+To build both programs:
+
+    make all
+
+
+## `ifparse` -- Test Program to parse `interfaces` file
+Create a `/DD/SYS/interfaces` file.  There is an example here in the `SYS` directory.
+
+Build a test program with
+
+    make ifparse
 
 Then run
 
@@ -18,3 +29,17 @@ This should show your interfaces file:
 To build this as a library (without the driver program main):
 
     dcc -r ifparse.c
+
+## `ccio` CoCoIO Initialization Program
+
+Build:
+
+    make ccio
+
+Reset Card:
+
+    ccio -r
+
+Initialize Card from `/DD/SYS/interfaces`:
+
+    ccio -i
