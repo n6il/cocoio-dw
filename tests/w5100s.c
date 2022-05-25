@@ -69,6 +69,25 @@ int cnt;
     }
 }
 
+/* w5100_regblkget()
+   Get a block of registers from the card
+   Return: 0 - OK
+*/
+int rgblkget(dst, reg, cnt)
+uint8_t *dst;
+uint16_t reg;
+int cnt;
+{
+    *(uint16_t *)CIO0ADDR = reg;
+    for ( ;cnt; cnt--,dst++)
+    {
+        *dst = *(uint8_t *)CIO0DATA;
+#ifdef DEBUG
+        printf("cnt=(%d) d=(%02x)\n", cnt, *dst);
+#endif
+    }
+}
+
 /* w5100_init()
    Setup the W5100 Card
    Return: 0 - OK
@@ -81,7 +100,7 @@ struct w51info *iface;
     if ( rgstvfy(CIO0CMND, MR_IND|MR_AINC, REGSET) )
         return 1;
     /* Write the interface IP config to the card */
-    rgblkset(iface, GAR0, 18);
+    rgblkset(iface, GAR0, W51INFO_LEN);
     return 0;
 }
 

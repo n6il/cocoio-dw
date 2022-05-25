@@ -3,7 +3,7 @@
 VHD=/media/pi/MRFDEMO/NITROS9/EOUB6/CCIOdist.VHD
 
 # CCIO
-for i in ifparse.c ifparse.h ccio.c w5100s.c w5100s.h cocoio.h makefile; do
+for i in ifparse.c ifparse.h ccio.c w5100s.c w5100s.h cocoio.h ping.c makefile; do
 	os9 copy "${VHD},CCIO/${i}" "${i}" -l
 done
 
@@ -15,6 +15,6 @@ done
 
 # CMDS
 mkdir -p $CMDS
-for i in ifparse ccio; do
+for i in ifparse ccio ping; do
 	os9 copy "${VHD},CMDS/${i}" "CMDS/${i}"
 done

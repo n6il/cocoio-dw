@@ -1,21 +1,27 @@
-OBJS = ccio.r ifparse.r w5100s.r
-BIN = /DD/CMDS/ccio /DD/CMDS/ifparse
+LOBJS = ifparse.r w5100s.r
+COBJ = ccio.r
+POBJ = ping.r
+BIN = /DD/CMDS/ccio /DD/CMDS/ifparse /DD/CMDS/ping
+
+all: ifparse ccio ping
+
+w5100s.r: w5100s.c
+ifparse.r: ifparse.c
+ccoio.r: ccio.c
+ping.r: ping.c
 
 # ifparse test program
 ifparse: ifparse.c
-    dcc -dDRIVER -f=$@ $?    
+    dcc -dDRIVER -f=$@ $?
 
 # ccio program
-ccoio.r: ccio.c
+ccio: $(COBJ) $(LOBJS)
+    dcc -f=$@ $(COBJ) $(LOBJS)
 
-ifparse.r: ifparse.c
-
-w5100s.r: w5100s.c
-
-ccio: $(OBJS)
-    dcc -f=$@ $?
+# ping program
+ping: $(POBJ) $(LOBJS)
+    dcc -f=$@ $(POBJ) $(LOBJS)
 
 clean:
-    del $(OBJS) $(BIN)
+    del $(LOBJS) $(POBJ) $(COBJ) $(BIN)
 
-all: ifparse ccio

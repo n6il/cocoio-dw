@@ -1,7 +1,7 @@
 This directory contains W5100 Test Code.  It is designed to be built 
 under NitrOS-9 using the DCC compiler suite.
 
-To build both programs:
+To build all three programs:
 
     make all
 
@@ -43,3 +43,13 @@ Reset Card:
 Initialize Card from `/DD/SYS/interfaces`:
 
     ccio -i
+
+## `ping` CoCoIO Ping Program
+
+Build:
+
+    make ping
+
+Usage:
+
+    ping <ip>

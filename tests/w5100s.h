@@ -1,3 +1,6 @@
+#ifndef W5100S_H
+#define W5100S_H
+
 /*********************************************************************
 ;* Title: W5100SEQU.asm
 ;*********************************************************************
@@ -104,6 +107,8 @@
 #define PHYCR1     0x0047       /* PHY Control Register 1 */
                                 /* 0x0048-0x004B -- Reserved -- */
 #define SLCR       0x004C       /* SOCKET-less Command Register */
+#define SLCR_P     0x01         /* Ping */
+#define SLCR_A     0x02         /* ARP */
 #define SLRTR0     0x004D       /* SOCKET-less Retransmission Time Register 0 */
 #define SLRTR1     0x004E       /* SOCKET-less Retransmission Time Register 1 */
 #define SLRCR      0x004F       /* SOCKET-less Retransmission Count Register */
@@ -122,7 +127,13 @@
 #define PINGIDR0   0x005C       /* PING ID Register 0 */
 #define PINGIDR1   0x005D       /* PING ID Register 1 */
 #define SLIMR      0x005E       /* SOCKET-less Interrupt Mask Register */
+#define SLIMR_P    0x01         /* Ping */
+#define SLIMR_A    0x02         /* ARP */
+#define SLIMR_T    0x04         /* Timeout */
 #define SLIR       0x005F       /* SOCKET-less Interrupt Register */
+#define SLIR_P     0x01         /* Ping */
+#define SLIR_A     0x02         /* ARP */
+#define SLIR_T     0x04         /* Timeout */
                                 /* 0x0060-0x006A -- Reserved -- */
 #define CLKLCKR    0x0070       /* Clock Lock Register */
 #define NETLCKR    0x0071       /* Network Lock Register */
@@ -332,9 +343,71 @@
 #define S3_RCR     0x0734       /* Socket 3 Retransmission Count Register */
 
                                 /* End of Equates */
+/* Structures */
+
+/* struct w5100_info
+
+W5100S Card Basic Setup Info
+   Length: 18
+    Start: GAR0 (0x0001)
+      End: SIPR3 (0x0012)
+
+*** IMPORTANT NOTE ***
+This structure has extra data at the end.  The reason why is this structure is
+used to read in the contents of /DD/SYS/interfaces, which contains the extra
+fields phyaddr and iface.  These fields should never be written to the card.
+If you do you will be writing garbage values to the card.  You have been
+warned.
+
+   Example:
+        #include "w5100s.h"
+        struct w51info iface;
+        regblkst(&iface, GAR0, W51INFO_LEN);
+*/
+
+#define W51INFO_LEN 18
+
+struct w51info {
+    uint8_t gateway[4];  /* Gateway  - GAR0 -  GAR3 */
+    uint8_t netmask[4];  /* Subnet   - SUBR0 - SUBR3 */
+    uint8_t macaddr[6];  /* MAC Addr - SHAR0 - SHAR5 */
+    uint8_t address[4];  /* IP Addr  - SIPR0 - SIPR3 */
+    /* End of Data */
+    /* Extra - DO NOT WRITE TO DEVICE */
+    uint8_t *phyaddr;
+    uint8_t iface[8];
+};
+
+/* struct w5100_sklsip
+
+SOCKET-less IP Setup Info
+
+   Length: 22
+    Start: SLRTR0 (0x004D)
+      End: SLIMR (0x005E)
+
+   Example:
+        #include "w5100s.h"
+        struct sklsip pingsetup;
+        regblkst(&pingsetup, SLRTR0, sizeof(struct sklsip));
+*/
+
+struct sklsip {
+    uint16_t retranst;      /* SLRTR0, SLRTR1 */
+     uint8_t retransc;      /* SLRCR */
+     uint8_t peerip[4];     /* SLPIPR0 - SLPIPR3 */
+     uint8_t peermac[6];    /* SLPHAR0 - SLPHAR5 */
+    uint16_t pingseqn;      /* PINGSEQR0, PINGSEQR1 */
+    uint16_t pingid;        /* PINGIDR0, PINGIDR1 */
+     uint8_t sklipmsk;      /* SLIMR */
+};
 
 
+/* Function Declarations */
 int rgstvfy();
 int w51reset();
 int rgblkset();
+int rgblkget();
 int w51init();
+
+#endif
