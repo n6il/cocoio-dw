@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <utime.h>
+#include <time.h>
 #include <memory.h>
 #include "socket.h"
 
@@ -86,13 +87,14 @@ char **argv;
 {
 
     char *ips = "172.16.1.11";
-    uint8_t ip[4], sgtb[6], *p;
+    uint8_t ip[4], *p;
     uint16_t port;
     int rv, len, tz, set;
     struct udppktin *upi;
     struct sntp *sntpmsg;
     uint32_t t;
     struct tm *tm;
+    struct sgtbuf sgtb;
 
 
     set = 0;
@@ -193,9 +195,11 @@ char **argv;
     {
         printf("Setting time.\n");
         /* Convert from Unix epoch-1970 to OS-9 sgtbuf */
-        u2otime(sgtb, localtime(&t));
+        u2otime(&sgtb, localtime(&t));
+        /* Add 1 to the month - os9 is 1-based */
+        sgtb.t_month++;
         /* Set the time */
-        setime(sgtb);
+        setime(&sgtb);
     }
     
     return 0;
