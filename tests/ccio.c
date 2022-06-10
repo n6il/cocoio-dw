@@ -21,14 +21,14 @@ char **argv;
         r = w51init(iface);
         if (r)
         {
-            fprintf(stderr, "w5100_init failed\n");
+            printf("w5100_init failed\n");
             return 1;
         } else {
             prnifnfo(iface);
-            fprintf(stderr, "w5100_init succeeded\n");
+            printf("w5100_init succeeded\n");
         }
     } else {
-        fprintf(stderr, "Usage: -r (Reset) -i (Init)\n");
+        printf("Usage: -r (Reset) -i (Init)\n");
         return 1;
     }
 

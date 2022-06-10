@@ -8,7 +8,7 @@
 */
 
 /* String Conversion Buffer */
-static char sbuf[17];
+static char sbuf[18];
 
 /*
 parseip - Parse IP Address string s into 4-byte array d

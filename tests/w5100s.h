@@ -1,6 +1,8 @@
 #ifndef W5100S_H
 #define W5100S_H
 
+#include <stdint.h>
+
 /*********************************************************************
 ;* Title: W5100SEQU.asm
 ;*********************************************************************
@@ -146,201 +148,116 @@
                                 /* 0x0084-0x0087 -- Reserved -- */
 #define TCNTCLR    0x0088       /* 100us Ticker Counter Clear Register */
 
-                                /* SOCKET 0 REGISTERS 0x0400-0x04FF 45 bytes per socket */
-#define S0_MR      0x0400       /* Socket 0 Mode Register */
-#define S0_CR      0x0401       /* Socket 0 Command Register */
-#define S0_IR      0x0402       /* Socket 0 Interrupt Register */
-#define S0_SR      0x0403       /* Socket 0 Status Register */
-#define S0_PORTR0  0x0404       /* Socket 0 Source Port Register 0 */
-#define S0_PORTR1  0x0405       /* Socket 0 Source Port Register 1 */
-#define S0_DHAR0   0x0406       /* Socket 0 Destination Hardware Address Register 0 */
-#define S0_DHAR1   0x0407       /* Socket 0 Destination Hardware Address Register 1 */
-#define S0_DHAR2   0x0408       /* Socket 0 Destination Hardware Address Register 2 */
-#define S0_DHAR3   0x0409       /* Socket 0 Destination Hardware Address Register 3 */
-#define S0_DHAR4   0x040A       /* Socket 0 Destination Hardware Address Register 4 */
-#define S0_DHAR5   0x040B       /* Socket 0 Destination Hardware Address Register 5 */
-#define S0_DIPR0   0x040C       /* Socket 0 Destination IP Address Register 0 */
-#define S0_DIPR1   0x040D       /* Socket 0 Destination IP Address Register 1 */
-#define S0_DIPR2   0x040E       /* Socket 0 Destination IP Address Register 2 */
-#define S0_DIPR3   0x040F       /* Socket 0 Destination IP Address Register 3 */
-#define S0_DPORTR0 0x0410       /* Socket 0 Destination Port Register 0 */
-#define S0_DPORTR1 0x0411       /* Socket 0 Destination Port Register 1 */
-#define S0_MSS0    0x0412       /* Socket 0 Maximum Segment Size Register 0 */
-#define S0_MSS1    0x0413       /* Socket 0 Maximum Segment Size Register 1 */
-#define S0_PROTOR  0x0414       /* Socket 0 IP Protocol Register */
-#define S0_TOS     0x0415       /* Socket 0 IP Type Of Service */
-#define S0_TTL     0x0416       /* Socket 0 IP Time To Live */
-                                /* 0x0417-0x041D -- Reserved -- */
-#define S0_RXBUF_SIZE  equ  $041E    /* Socket 0 RX Buffer Size */
-#define S0_TXBUF_SIZE  equ  $041F    /* Socket 0 TX Buffer Size */
-#define S0_TX_FSR0 0x0420       /* Socket 0 TX Free Size Register 0 */
-#define S0_TX_FSR1 0x0421       /* Socket 0 TX Free Size Register 1 */
-#define S0_TX_RD0  0x0422       /* Socket 0 TX Read Pointer 0 */
-#define S0_TX_RD1  0x0423       /* Socket 0 TX Read Pointer 1 */
-#define S0_TX_WR0  0x0424       /* Socket 0 TX Write Pointer 0 */
-#define S0_TX_WR1  0x0425       /* Socket 0 TX Write Pointer 1 */
-#define S0_RX_RSR0 0x0426       /* Socket 0 RX Received Size Register 0 */
-#define S0_RX_RSR1 0x0427       /* Socket 0 RX Received Size Register 1 */
-#define S0_RX_RD0  0x0428       /* Socket 0 RX Read Pointer 0 */
-#define S0_RX_RD1  0x0429       /* Socket 0 RX Read Pointer 1 */
-#define S0_RX_WR0  0x042A       /* Socket 0 RX Write Pointer 0 */
-#define S0_RX_WR1  0x042B       /* Socket 0 RX Write Pointer 1 */
-#define S0_IMR     0x042C       /* Socket 0 Interrupt Mask Register */
-#define S0_FRAGR0  0x042D       /* Socket 0 Fragment Offset in IP Header Register 0 */
-#define S0_FRAGR1  0x042E       /* Socket 0 Fragment Offset in IP Header Register 1 */
-#define S0_MR2     0x042F       /* Socket 0 Mode 2 Register */
-#define S0_KPALVTR 0x0430       /* Socket 0 Keep-alive Timer Register */
-                                /* 0x0431 -- Reserved -- */
-#define S0_RTR0    0x0432       /* Socket 0 Retransmission Time Register 0 */
-#define S0_RTR1    0x0433       /* Socket 0 Retransmission Time Register 1 */
-#define S0_RCR     0x0434       /* Socket 0 Retransmission Count Register */
+                    /* SOCKET 0 REGISTERS 0x0400-0x04FF 45 bytes per socket */
+                    /* SOCKET 1 REGISTERS 0x0500-0x05FF 45 bytes per socket */
+                    /* SOCKET 2 REGISTERS 0x0600-0x06FF 45 bytes per socket */
+                    /* SOCKET 3 REGISTERS 0x0700-0x07FF 45 bytes per socket */
 
-                                /* SOCKET 1 REGISTERS 0x0500-0x05FF 45 bytes per socket */
-#define S1_MR      0x0500       /* Socket 1 Mode Register */
-#define S1_CR      0x0501       /* Socket 1 Command Register */
-#define S1_IR      0x0502       /* Socket 1 Interrupt Register */
-#define S1_SR      0x0503       /* Socket 1 Status Register */
-#define S1_PORTR0  0x0504       /* Socket 1 Source Port Register 0 */
-#define S1_PORTR1  0x0505       /* Socket 1 Source Port Register 1 */
-#define S1_DHAR0   0x0506       /* Socket 1 Destination Hardware Address Register 0 */
-#define S1_DHAR1   0x0507       /* Socket 1 Destination Hardware Address Register 1 */
-#define S1_DHAR2   0x0508       /* Socket 1 Destination Hardware Address Register 2 */
-#define S1_DHAR3   0x0509       /* Socket 1 Destination Hardware Address Register 3 */
-#define S1_DHAR4   0x050A       /* Socket 1 Destination Hardware Address Register 4 */
-#define S1_DHAR5   0x050B       /* Socket 1 Destination Hardware Address Register 5 */
-#define S1_DIPR0   0x050C       /* Socket 1 Destination IP Address Register 0 */
-#define S1_DIPR1   0x050D       /* Socket 1 Destination IP Address Register 1 */
-#define S1_DIPR2   0x050E       /* Socket 1 Destination IP Address Register 2 */
-#define S1_DIPR3   0x050F       /* Socket 1 Destination IP Address Register 3 */
-#define S1_DPORTR0 0x0510       /* Socket 1 Destination Port Register 0 */
-#define S1_DPORTR1 0x0511       /* Socket 1 Destination Port Register 1 */
-#define S1_MSS0    0x0512       /* Socket 1 Maximum Segment Size Register 0 */
-#define S1_MSS1    0x0513       /* Socket 1 Maximum Segment Size Register 1 */
-#define S1_PROTOR  0x0514       /* Socket 1 IP Protocol Register */
-#define S1_TOS     0x0515       /* Socket 1 IP Type Of Service */
-#define S1_TTL     0x0516       /* Socket 1 IP Time To Live */
-                                /* 0x0517-0x051D -- Reserved -- */
-#define S1_RXBUF_SIZE  equ  $051E    /* Socket 1 RX Buffer Size */
-#define S1_TXBUF_SIZE  equ  $051F    /* Socket 1 TX Buffer Size */
-#define S1_TX_FSR0 0x0520       /* Socket 1 TX Free Size Register 0 */
-#define S1_TX_FSR1 0x0521       /* Socket 1 TX Free Size Register 1 */
-#define S1_TX_RD0  0x0522       /* Socket 1 TX Read Pointer 0 */
-#define S1_TX_RD1  0x0523       /* Socket 1 TX Read Pointer 1 */
-#define S1_TX_WR0  0x0524       /* Socket 1 TX Write Pointer 0 */
-#define S1_TX_WR1  0x0525       /* Socket 1 TX Write Pointer 1 */
-#define S1_RX_RSR0 0x0526       /* Socket 1 RX Received Size Register 0 */
-#define S1_RX_RSR1 0x0527       /* Socket 1 RX Received Size Register 1 */
-#define S1_RX_RD0  0x0528       /* Socket 1 RX Read Pointer 0 */
-#define S1_RX_RD1  0x0529       /* Socket 1 RX Read Pointer 1 */
-#define S1_RX_WR0  0x052A       /* Socket 1 RX Write Pointer 0 */
-#define S1_RX_WR1  0x052B       /* Socket 1 RX Write Pointer 1 */
-#define S1_IMR     0x052C       /* Socket 1 Interrupt Mask Register */
-#define S1_FRAGR0  0x052D       /* Socket 1 Fragment Offset in IP Header Register 0 */
-#define S1_FRAGR1  0x052E       /* Socket 1 Fragment Offset in IP Header Register 1 */
-#define S1_MR2     0x052F       /* Socket 1 Mode 2 Register */
-#define S1_KPALVTR 0x0530       /* Socket 1 Keep-alive Timer Register */
-                                /* 0x0531 -- Reserved -- */
-#define S1_RTR0    0x0532       /* Socket 1 Retransmission Time Register 0 */
-#define S1_RTR1    0x0533       /* Socket 1 Retransmission Time Register 1 */
-#define S1_RCR     0x0534       /* Socket 1 Retransmission Count Register */
+/* Socket Register Macros */
 
-                                /* SOCKET 2 REGISTERS 0x0600-0x06FF 45 bytes per socket */
-#define S2_MR      0x0600       /* Socket 2 Mode Register */
-#define S2_CR      0x0601       /* Socket 2 Command Register */
-#define S2_IR      0x0602       /* Socket 2 Interrupt Register */
-#define S2_SR      0x0603       /* Socket 2 Status Register */
-#define S2_PORTR0  0x0604       /* Socket 2 Source Port Register 0 */
-#define S2_PORTR1  0x0605       /* Socket 2 Source Port Register 1 */
-#define S2_DHAR0   0x0606       /* Socket 2 Destination Hardware Address Register 0 */
-#define S2_DHAR1   0x0607       /* Socket 2 Destination Hardware Address Register 1 */
-#define S2_DHAR2   0x0608       /* Socket 2 Destination Hardware Address Register 2 */
-#define S2_DHAR3   0x0609       /* Socket 2 Destination Hardware Address Register 3 */
-#define S2_DHAR4   0x060A       /* Socket 2 Destination Hardware Address Register 4 */
-#define S2_DHAR5   0x060B       /* Socket 2 Destination Hardware Address Register 5 */
-#define S2_DIPR0   0x060C       /* Socket 2 Destination IP Address Register 0 */
-#define S2_DIPR1   0x060D       /* Socket 2 Destination IP Address Register 1 */
-#define S2_DIPR2   0x060E       /* Socket 2 Destination IP Address Register 2 */
-#define S2_DIPR3   0x060F       /* Socket 2 Destination IP Address Register 3 */
-#define S2_DPORTR0 0x0610       /* Socket 2 Destination Port Register 0 */
-#define S2_DPORTR1 0x0611       /* Socket 2 Destination Port Register 1 */
-#define S2_MSS0    0x0612       /* Socket 2 Maximum Segment Size Register 0 */
-#define S2_MSS1    0x0613       /* Socket 2 Maximum Segment Size Register 1 */
-#define S2_PROTOR  0x0614       /* Socket 2 IP Protocol Register */
-#define S2_TOS     0x0615       /* Socket 2 IP Type Of Service */
-#define S2_TTL     0x0616       /* Socket 2 IP Time To Live */
-                                /* 0x0617-0x061D -- Reserved -- */
-#define S2_RXBUF_SIZE  equ  $061E    /* Socket 2 RX Buffer Size */
-#define S2_TXBUF_SIZE  equ  $061F    /* Socket 2 TX Buffer Size */
-#define S2_TX_FSR0 0x0620       /* Socket 2 TX Free Size Register 0 */
-#define S2_TX_FSR1 0x0621       /* Socket 2 TX Free Size Register 1 */
-#define S2_TX_RD0  0x0622       /* Socket 2 TX Read Pointer 0 */
-#define S2_TX_RD1  0x0623       /* Socket 2 TX Read Pointer 1 */
-#define S2_TX_WR0  0x0624       /* Socket 2 TX Write Pointer 0 */
-#define S2_TX_WR1  0x0625       /* Socket 2 TX Write Pointer 1 */
-#define S2_RX_RSR0 0x0626       /* Socket 2 RX Received Size Register 0 */
-#define S2_RX_RSR1 0x0627       /* Socket 2 RX Received Size Register 1 */
-#define S2_RX_RD0  0x0628       /* Socket 2 RX Read Pointer 0 */
-#define S2_RX_RD1  0x0629       /* Socket 2 RX Read Pointer 1 */
-#define S2_RX_WR0  0x062A       /* Socket 2 RX Write Pointer 0 */
-#define S2_RX_WR1  0x062B       /* Socket 2 RX Write Pointer 1 */
-#define S2_IMR     0x062C       /* Socket 2 Interrupt Mask Register */
-#define S2_FRAGR0  0x062D       /* Socket 2 Fragment Offset in IP Header Register 0 */
-#define S2_FRAGR1  0x062E       /* Socket 2 Fragment Offset in IP Header Register 1 */
-#define S2_MR2     0x062F       /* Socket 2 Mode 2 Register */
-#define S2_KPALVTR 0x0630       /* Socket 2 Keep-alive Timer Register */
-                                /* 0x0631 -- Reserved -- */
-#define S2_RTR0    0x0632       /* Socket 2 Retransmission Time Register 0 */
-#define S2_RTR1    0x0633       /* Socket 2 Retransmission Time Register 1 */
-#define S2_RCR     0x0634       /* Socket 2 Retransmission Count Register */
+#define SKREGBASE   0x0400      /* Base Address for Sock Registers (Sock 0) */
+#define SKREGBLK   0x0100      /* Size of Sock Register Blocks */
+#define SKREGBLKOFS(k) (SKREGBLK*k) /* Socket k Register Block Offset */
+#define SKREGADR(k) (SKREGBASE+SKREGBLKOFS(k)) /* Sock k Reg Blk Address */
+#define SKREGABS(k, r) (SKREGADR(k)+r) /* Sock k Register r Address Absolute */
+#define SKREGREL(o, r) (SKREGBASE+o+r) /* Sock k Register r Address Relative */
+#define SKPTRREG(p, r) (p->skrgaddr + r)
 
-                                /* SOCKET 3 REGISTERS 0x0700-0x07FF 45 bytes per socket */
-#define S3_MR      0x0700       /* Socket 3 Mode Register */
-#define S3_CR      0x0701       /* Socket 3 Command Register */
-#define S3_IR      0x0702       /* Socket 3 Interrupt Register */
-#define S3_SR      0x0703       /* Socket 3 Status Register */
-#define S3_PORTR0  0x0704       /* Socket 3 Source Port Register 0 */
-#define S3_PORTR1  0x0705       /* Socket 3 Source Port Register 1 */
-#define S3_DHAR0   0x0706       /* Socket 3 Destination Hardware Address Register 0 */
-#define S3_DHAR1   0x0707       /* Socket 3 Destination Hardware Address Register 1 */
-#define S3_DHAR2   0x0708       /* Socket 3 Destination Hardware Address Register 2 */
-#define S3_DHAR3   0x0709       /* Socket 3 Destination Hardware Address Register 3 */
-#define S3_DHAR4   0x070A       /* Socket 3 Destination Hardware Address Register 4 */
-#define S3_DHAR5   0x070B       /* Socket 3 Destination Hardware Address Register 5 */
-#define S3_DIPR0   0x070C       /* Socket 3 Destination IP Address Register 0 */
-#define S3_DIPR1   0x070D       /* Socket 3 Destination IP Address Register 1 */
-#define S3_DIPR2   0x070E       /* Socket 3 Destination IP Address Register 2 */
-#define S3_DIPR3   0x070F       /* Socket 3 Destination IP Address Register 3 */
-#define S3_DPORTR0 0x0710       /* Socket 3 Destination Port Register 0 */
-#define S3_DPORTR1 0x0711       /* Socket 3 Destination Port Register 1 */
-#define S3_MSS0    0x0712       /* Socket 3 Maximum Segment Size Register 0 */
-#define S3_MSS1    0x0713       /* Socket 3 Maximum Segment Size Register 1 */
-#define S3_PROTOR  0x0714       /* Socket 3 IP Protocol Register */
-#define S3_TOS     0x0715       /* Socket 3 IP Type Of Service */
-#define S3_TTL     0x0716       /* Socket 3 IP Time To Live */
-                                /* 0x0717-0x071D -- Reserved -- */
-#define S3_RXBUF_SIZE  0x071E    /* Socket 3 RX Buffer Size */
-#define S3_TXBUF_SIZE  0x071F    /* Socket 3 TX Buffer Size */
-#define S3_TX_FSR0 0x0720       /* Socket 3 TX Free Size Register 0 */
-#define S3_TX_FSR1 0x0721       /* Socket 3 TX Free Size Register 1 */
-#define S3_TX_RD0  0x0722       /* Socket 3 TX Read Pointer 0 */
-#define S3_TX_RD1  0x0723       /* Socket 3 TX Read Pointer 1 */
-#define S3_TX_WR0  0x0724       /* Socket 3 TX Write Pointer 0 */
-#define S3_TX_WR1  0x0725       /* Socket 3 TX Write Pointer 1 */
-#define S3_RX_RSR0 0x0726       /* Socket 3 RX Received Size Register 0 */
-#define S3_RX_RSR1 0x0727       /* Socket 3 RX Received Size Register 1 */
-#define S3_RX_RD0  0x0728       /* Socket 3 RX Read Pointer 0 */
-#define S3_RX_RD1  0x0729       /* Socket 3 RX Read Pointer 1 */
-#define S3_RX_WR0  0x072A       /* Socket 3 RX Write Pointer 0 */
-#define S3_RX_WR1  0x072B       /* Socket 3 RX Write Pointer 1 */
-#define S3_IMR     0x072C       /* Socket 3 Interrupt Mask Register */
-#define S3_FRAGR0  0x072D       /* Socket 3 Fragment Offset in IP Header Register 0 */
-#define S3_FRAGR1  0x072E       /* Socket 3 Fragment Offset in IP Header Register 1 */
-#define S3_MR2     0x072F       /* Socket 3 Mode 2 Register */
-#define S3_KPALVTR 0x0730       /* Socket 3 Keep-alive Timer Register */
-                                /* 0x0731 -- Reserved -- */
-#define S3_RTR0    0x0732       /* Socket 3 Retransmission Time Register 0 */
-#define S3_RTR1    0x0733       /* Socket 3 Retransmission Time Register 1 */
-#define S3_RCR     0x0734       /* Socket 3 Retransmission Count Register */
+/* Socket Buffer Macros */
+#define SKTXBUFBASE  0x4000
+#define SKRXBUFBASE  0x6000
+#define SKBUFSIZE    0x0800
+#define SKBUFMASK    0x07FF
+#define SKRXBSTRT(k)    (SKRXBUFBASE+(k*SKBUFSIZE))
+#define SKTXBSTRT(k)    (SKTXBUFBASE+(k*SKBUFSIZE))
+#define SKRXBEND(k)    (SKRXBUFBASE+((k+1)*SKBUFSIZE)-1)
+#define SKTXBEND(k)    (SKTXBUFBASE+((k+1)*SKBUFSIZE)-1)
+
+/* Socket Register Defs */
+
+#define SK_MR      0x0000       /* Socket K Mode Register */
+#define SK_MR_PCLR 0xF0         /* Protocol: Clear */
+#define SK_MR_PMSK 0x0F         /* Protocol: Mask */
+#define SK_MR_CLSD 0x00         /* Protocool: Socket Closed */
+#define SK_MR_TCP  0x01         /* Protocol: TCP */
+#define SK_MR_UDP  0x02         /* Protocol: UDP */
+#define SK_MR_IPRW 0x03         /* Protocol: IP Raw */
+#define SK_MR_MACR 0x04         /* Protocol: MAC Raw */
+#define SK_MR_ND   0x20         /* Protocol: TCP No Delay*/
+#define SK_MR_CLND 0xDF         /* Protocol: Clear TCP No Delay */
+#define SK_CR      0x0001       /* Socket K Command Register */
+#define SK_CR_OPEN 0x01
+#define SK_CR_LSTN 0x02
+#define SK_CR_CONN 0x04
+#define SK_CR_DISC 0x08
+#define SK_CR_CLOS 0x10
+#define SK_CR_SEND 0x20
+#define SK_CR_KEEP 0x22
+#define SK_CR_RECV 0x40
+#define SK_IR      0x0002       /* Socket K Interrupt Register */
+#define SK_IR_CON  0x01
+#define SK_IR_DISC 0x02
+#define SK_IR_RECV 0x04
+#define SK_IR_TOUT 0x08
+#define SK_IR_TXOK 0x10
+#define SK_SR      0x0003       /* Socket K Status Register */
+#define SK_SR_CLOS 0x00
+#define SK_SR_INIT 0x13
+#define SK_SR_LSTN 0x14
+#define SK_SR_SYNS 0x15
+#define SK_SR_SYNR 0x16
+#define SK_SR_ESTB 0x17
+#define SK_SR_FINW 0x18
+#define SK_SR_TIMW 0x1B
+#define SK_SR_CLWT 0x1C
+#define SK_SR_LACK 0x1D
+#define SK_SR_UDP  0x22
+#define SK_SR_IPRW 0x32
+#define SK_SR_MACR 0x42
+#define SK_PORTR0  0x0004       /* Socket K Source Port Register 0 */
+#define SK_PORTR1  0x0005       /* Socket K Source Port Register 1 */
+#define SK_DHAR0   0x0006       /* Socket K Destination Hardware Address Register 0 */
+#define SK_DHAR1   0x0007       /* Socket K Destination Hardware Address Register 1 */
+#define SK_DHAR2   0x0008       /* Socket K Destination Hardware Address Register 2 */
+#define SK_DHAR3   0x0009       /* Socket K Destination Hardware Address Register 3 */
+#define SK_DHAR4   0x000A       /* Socket K Destination Hardware Address Register 4 */
+#define SK_DHAR5   0x000B       /* Socket K Destination Hardware Address Register 5 */
+#define SK_DIPR0   0x000C       /* Socket K Destination IP Address Register 0 */
+#define SK_DIPR1   0x000D       /* Socket K Destination IP Address Register 1 */
+#define SK_DIPR2   0x000E       /* Socket K Destination IP Address Register 2 */
+#define SK_DIPR3   0x000F       /* Socket K Destination IP Address Register 3 */
+#define SK_DPORTR0 0x0010       /* Socket K Destination Port Register 0 */
+#define SK_DPORTR1 0x0011       /* Socket K Destination Port Register 1 */
+#define SK_MSS0    0x0012       /* Socket K Maximum Segment Size Register 0 */
+#define SK_MSS1    0x0013       /* Socket K Maximum Segment Size Register 1 */
+#define SK_PROTOR  0x0014       /* Socket K IP Protocol Register */
+#define SK_TOS     0x0015       /* Socket K IP Type Of Service */
+#define SK_TTL     0x0016       /* Socket K IP Time To Live */
+                                /* 0x0X17-0x0X1D -- Reserved -- */
+#define SK_RXBUF_SIZE  $041E    /* Socket K RX Buffer Size */
+#define SK_TXBUF_SIZE  $041F    /* Socket K TX Buffer Size */
+#define SK_TX_FSR0 0x0020       /* Socket K TX Free Size Register 0 */
+#define SK_TX_FSR1 0x0021       /* Socket K TX Free Size Register 1 */
+#define SK_TX_RD0  0x0022       /* Socket K TX Read Pointer 0 */
+#define SK_TX_RD1  0x0023       /* Socket K TX Read Pointer 1 */
+#define SK_TX_WR0  0x0024       /* Socket K TX Write Pointer 0 */
+#define SK_TX_WR1  0x0025       /* Socket K TX Write Pointer 1 */
+#define SK_RX_RSR0 0x0026       /* Socket K RX Received Size Register 0 */
+#define SK_RX_RSR1 0x0027       /* Socket K RX Received Size Register 1 */
+#define SK_RX_RD0  0x0028       /* Socket K RX Read Pointer 0 */
+#define SK_RX_RD1  0x0029       /* Socket K RX Read Pointer 1 */
+#define SK_RX_WR0  0x002A       /* Socket K RX Write Pointer 0 */
+#define SK_RX_WR1  0x002B       /* Socket K RX Write Pointer 1 */
+#define SK_IMR     0x002C       /* Socket K Interrupt Mask Register */
+#define SK_FRAGR0  0x002D       /* Socket K Fragment Offset in IP Header Register 0 */
+#define SK_FRAGR1  0x002E       /* Socket K Fragment Offset in IP Header Register 1 */
+#define SK_MR2     0x002F       /* Socket K Mode 2 Register */
+#define SK_KPALVTR 0x0030       /* Socket K Keep-alive Timer Register */
+                                /* 0x0X31 -- Reserved -- */
+#define SK_RTR0    0x0032       /* Socket K Retransmission Time Register 0 */
+#define SK_RTR1    0x0033       /* Socket K Retransmission Time Register 1 */
+#define SK_RCR     0x0034       /* Socket K Retransmission Count Register */
+
 
                                 /* End of Equates */
 /* Structures */

@@ -104,7 +104,7 @@ char **argv;
         buf[0] = SLIR_T|SLIR_P;
         rgblkset(buf, SLIR, 1);
 
-        sleep(1);
+        tsleep(60);
     }
 
     /* Ping Done - Clear SLIMR Flags */
