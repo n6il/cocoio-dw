@@ -26,6 +26,7 @@ done
 # CMDS
 for i in ifparse ccio ping bufftest echou ntpdate; do
  	os9 copy "CMDS/${i}" "${DSK},CMDS/${i}"
+	os9 attr "${DSK},CMDS/${i}" -e -pe
 done
 
 os9 copy README.md "${DSK},README.md"
