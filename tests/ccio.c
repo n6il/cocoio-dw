@@ -8,6 +8,7 @@ char **argv;
 {
     int r;
     struct w51info *iface;
+    struct w51info iface2;
 
 
     if (strcmp(argv[1], "-r") == 0)
@@ -23,8 +24,15 @@ char **argv;
         {
             printf("w5100_init failed\n");
             return 1;
+        }
+        iface2.phyaddr = iface->phyaddr;
+        memcpy(iface2.iface, iface->iface, 8);
+        rgblkget(&iface2, GAR0, W51INFO_LEN);
+        prnifnfo(&iface2);
+        if ( memcmp(iface, &iface2, W51INFO_LEN) != 0 )
+        {
+            printf("w5100_init failed\n");
         } else {
-            prnifnfo(iface);
             printf("w5100_init succeeded\n");
         }
     } else {
