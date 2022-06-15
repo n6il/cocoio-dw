@@ -29,4 +29,7 @@ for i in ifparse ccio ping bufftest echou ntpdate; do
 	os9 attr "${DSK},CMDS/${i}" -e -pe
 done
 
-os9 copy README.md "${DSK},README.md"
+os9 copy README.md "${DSK},README.md" -l -r
+
+echo "cocoio-tools $(date +%Y%m%d-%H%M%S)" >/tmp/version.txt
+os9 copy /tmp/version.txt "${DSK},version.txt" -l -r
