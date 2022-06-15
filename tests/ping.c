@@ -21,7 +21,12 @@ char **argv;
     }
 
     /* Set up for W5100 SOCKET-less IP */
-    parseip(sklsipd.peerip, argv[1]);
+    t = parseip(sklsipd.peerip, argv[1]);
+    if (!t)
+    {
+        printf("Bad ip address\n");
+        exit(1);
+    }
     sklsipd.retranst = 0x03e8;
     sklsipd.retransc = 0x05;
     sklsipd.sklipmsk = SLIMR_P|SLIMR_T;
