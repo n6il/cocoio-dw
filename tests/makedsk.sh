@@ -3,6 +3,7 @@
 set -x
 
 DSK=cocoio-tools.dsk
+# DSK=cocoio-tools-slow.dsk
 
 rm -f "${DSK}"
 os9 format -e "${DSK}"

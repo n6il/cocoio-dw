@@ -9,6 +9,9 @@ BLIBS = w5100s.r
 NOBJ = ntpdate.r
 NLIBS = socket.r w5100s.r ifparse.r
 CC = dcc
+CFLAGS = 
+# CFLAGS = -dDEBUG
+# CFLAGS = -dSLOWPATCH
 
 all: ifparse ccio ping echou bufftest ntpdate
 

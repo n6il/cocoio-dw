@@ -6,6 +6,23 @@
 #define REGSET 1
 #define REGCLR 0
 
+#ifdef SLOWPATCH
+#asm
+
+goslo
+	sta $ffd8 slow down CPU (SAM doesn't care what we write)
+	rts
+
+noslo
+	sta $ffd9 speed CPU back up
+	pshs a
+	lda #'Z special GIME-X "turbo" value
+	sta $ffd9
+	puls a,pc
+
+#endasm
+#endif
+
 /* rgstvfy - 
     W5100 Register Set & Verify
 
@@ -26,11 +43,13 @@ int s;
 {
     int i;
     char r;
+
+#ifdef SLOWPATCH
+    goslo();
+#endif
+
     *p |= v;
-#asm
- nop
- nop
-#endasm
+
     for ( i=0; i<3; i++ ) {
         r = s ? (*p)!=v : (*p) & v;
 #ifdef DEBUG
@@ -38,7 +57,14 @@ int s;
 #endif
         if (!r)
             break;
+
+#ifdef SLOWPATCH
+        noslo();
+#endif
         tsleep(1);
+#ifdef SLOWPATCH
+        goslo();
+#endif
     }
     return r;
 }
@@ -66,6 +92,11 @@ int cnt;
     // *(uint16_t *)CIO0ADDR = reg;
     uint8_t *c;
     c = &reg;
+
+#ifdef SLOWPATCH
+    goslo();
+#endif
+
     *(uint8_t *)(CIO0ADDR) = *c++;
     *(uint8_t *)(CIO0ADDR+1) = *c;
     for ( ;cnt; cnt--,src++)
@@ -74,13 +105,11 @@ int cnt;
         printf("cnt=(%d) d=(%02x)\n", cnt, *src);
 #endif
         *(uint8_t *)CIO0DATA = *src;
-/*
-#asm
- nop
- nop
-#endasm
-*/
+
     }
+#ifdef SLOWPATCH
+    noslo();
+#endif
 }
 
 /* w5100_regblkget()
@@ -95,21 +124,22 @@ int cnt;
     // *(uint16_t *)CIO0ADDR = reg;
     uint8_t *c;
     c = &reg;
+
+#ifdef SLOWPATCH
+    goslo();
+#endif
     *(uint8_t *)(CIO0ADDR) = *c++;
     *(uint8_t *)(CIO0ADDR+1) = *c;
     for ( ;cnt; cnt--,dst++)
     {
         *dst = *(uint8_t *)CIO0DATA;
-/*
-#asm
- nop
- nop
-#endasm
-*/
 #ifdef DEBUG
         printf("cnt=(%d) d=(%02x)\n", cnt, *dst);
 #endif
     }
+#ifdef SLOWPATCH
+    noslo();
+#endif
 }
 
 /* w5100_init()
