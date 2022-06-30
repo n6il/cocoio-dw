@@ -1,7 +1,12 @@
 #ifndef W5100S_H
 #define W5100S_H
 
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#else
 #include <stdint.h>
+#endif
+#include "commondefs.h"
 
 /*********************************************************************
 ;* Title: W5100SEQU.asm
@@ -321,10 +326,10 @@ struct sklsip {
 
 
 /* Function Declarations */
-int rgstvfy();
+int rgstvfy(ARGS3(char *p, char v, int s));
 int w51reset();
-int rgblkset();
-int rgblkget();
-int w51init();
+int rgblkset(ARGS3(uint8_t *src, uint16_t reg, int cnt));
+int rgblkget(ARGS3(uint8_t *src, uint16_t reg, int cnt));
+int w51init(ARGS1(struct w51info *iface));
 
 #endif

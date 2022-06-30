@@ -1,4 +1,9 @@
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#include "cmoclib/system.h"
+#else
 #include <stdio.h>
+#endif
 #include "ifparse.h"
 #include "w5100s.h"
 #include "cocoio.h"
@@ -7,20 +12,40 @@
 #define REGCLR 0
 
 #ifdef SLOWPATCH
+#ifdef _CMOC_VERSION_
+asm void goslo(void) { asm {
+#else
 #asm
 
 goslo
-	sta $ffd8 slow down CPU (SAM doesn't care what we write)
+#endif
+	sta $ffd8  slow down CPU (SAM doesnt care what we write)
 	rts
 
+#ifdef _CMOC_VERSION_
+}}
+#else
+#endasm
+#endif
+
+#ifdef _CMOC_VERSION_
+asm void noslo(void) { asm {
+#else
+#asm
 noslo
+#endif
 	sta $ffd9 speed CPU back up
 	pshs a
-	lda #'Z special GIME-X "turbo" value
+	lda #'Z' special GIME-X "turbo" value
 	sta $ffd9
 	puls a,pc
 
+#ifdef _CMOC_VERSION_
+}}
+#else
 #endasm
+#endif
+
 #endif
 
 /* rgstvfy - 
@@ -91,7 +116,7 @@ int cnt;
 
     // *(uint16_t *)CIO0ADDR = reg;
     uint8_t *c;
-    c = &reg;
+    c = (uint8_t *)&reg;
 
 #ifdef SLOWPATCH
     goslo();
@@ -123,7 +148,7 @@ int cnt;
 {
     // *(uint16_t *)CIO0ADDR = reg;
     uint8_t *c;
-    c = &reg;
+    c = (uint8_t *)&reg;
 
 #ifdef SLOWPATCH
     goslo();
@@ -154,7 +179,7 @@ struct w51info *iface;
     if ( rgstvfy(CIO0CMND, MR_IND|MR_AINC, REGSET) )
         return 1;
     /* Write the interface IP config to the card */
-    rgblkset(iface, GAR0, W51INFO_LEN);
+    rgblkset((char *)iface, GAR0, W51INFO_LEN);
     return 0;
 }
 

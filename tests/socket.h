@@ -1,7 +1,12 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#else
 #include <stdint.h>
+#endif
+#include "commondefs.h"
 
 #define NUMSOCKS 4
 
@@ -38,14 +43,14 @@ struct udppktin {
 #define ENOBUFS         -0x714
 #define ETIMEDOUT       -0x719
 
-int socket();
+int socket(ARGS3(int af, int type, int protocol));
 int bind();
 int listen();
 int accept();
-int connect();
-int recv();
-int send();
+int connect(ARGS3(int sock, uint8_t ip[4], uint16_t port));
+int recv(ARGS4(int s, uint8_t *buf, int len, int flags));
+int send(ARGS4(int s, uint8_t *buf, int len, int flags));
 int select();
-int shutdown();
+int shutdown(ARGS1(int sock));
 
 #endif

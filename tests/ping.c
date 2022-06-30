@@ -1,4 +1,10 @@
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#include "cmoclib/string.h"
+#include "cmoclib/system.h"
+#else
 #include <stdio.h>
+#endif
 #include "ifparse.h"
 #include "w5100s.h"
 
@@ -6,14 +12,23 @@
 #define MAXSEQ NPINGS+1
 
 
+#ifdef _CMOC_VERSION_
+int main()
+#else
 int main(argc, argv)
 int argc;
 char **argv;
+#endif
 {
     uint8_t buf[2];
     struct sklsip sklsipd;
     int t, pingseq;
 
+#ifdef _CMOC_VERSION_
+    int argc;
+    char **argv;
+    getcmdln(&argc, &argv);
+#endif
     if (argc != 2)
     {
         fprintf(stderr, "Usage: ping <ip>\n");
@@ -33,7 +48,7 @@ char **argv;
     sklsipd.pingseqn = 1;
     sklsipd.pingid = getpid();
     /* Send the register block to the card. */
-    rgblkset(&sklsipd, SLRTR0, sizeof(struct sklsip));
+    rgblkset((uint8_t *)&sklsipd, SLRTR0, sizeof(struct sklsip));
 
     printf("ping ip=(%s)\n", ip2str(sklsipd.peerip));
 
@@ -41,7 +56,7 @@ char **argv;
     for(pingseq=1; pingseq<MAXSEQ; pingseq++)
     {
         /* Set Ping Sequence Num */
-        rgblkset(&pingseq, PINGSEQR0, 2);
+        rgblkset((uint8_t *)&pingseq, PINGSEQR0, 2);
     
         /* Send the ping command */
         buf[0] = SLCR_P;

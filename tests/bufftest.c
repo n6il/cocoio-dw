@@ -1,6 +1,10 @@
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#else
 #include <stdio.h>
 #include <stdint.h>
 #include <memory.h>
+#endif
 #include "w5100s.h"
 
 #define SIZE 16384
@@ -26,9 +30,13 @@ uint8_t pat;
     return e;
 }
 
+#ifdef _CMOC_VERSION_
+int main(void)
+#else
 int main(argc, argv)
 int argc;
 char **argv;
+#endif
 {
     uint8_t pat;
     uint16_t e,t;

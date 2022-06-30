@@ -1,5 +1,12 @@
+#ifdef _CMOC_VERSION_
+#include <cmoc.h>
+#include <coco.h>
+#include "cmoclib/string.h"
+#include "cmoclib/file.h"
+#else
 #include <stdio.h>
 #include <stdint.h>
+#endif
 #include "ifparse.h"
 
 /*
@@ -84,7 +91,11 @@ char *s;
         s3 = strtok(s2, ":");
         if (!s3)
             break;
+#ifdef _CMOC_VERSION_
+	j = hexi8(s3);
+#else
         sscanf(s3, "%02x", &j);
+#endif
         d[i] = j;
     }
     return (i==6);
@@ -94,6 +105,13 @@ char *s;
 ifparse - Read and parse interfaces file
 Return: pointer to w51info struct, NULL on error
 */
+#ifdef _CMOC_VERSION_
+static struct w51info rbuf;
+byte fat[MAX_NUM_GRANULES];
+#define LINETERM '\r'
+#else
+#define LINETERM '\n'
+#endif
 struct w51info *ifparse()
 {
     FILE *f;
@@ -101,8 +119,14 @@ struct w51info *ifparse()
     int i;
     struct w51info *r;
     i=0;
-    r=malloc(sizeof(struct w51info));;
+#ifdef _CMOC_VERSION_
+    initdisk(fat);
+    f=fopen("IFACE.TXT", "r");
+    r=&rbuf;
+#else
     f=fopen("/DD/SYS/interfaces", "r");
+    r=malloc(sizeof(struct w51info));;
+#endif
     if (f==NULL)
     {
         printf("cant open file\n");
@@ -110,7 +134,7 @@ struct w51info *ifparse()
     }
     while(fgets(buf,80,f))
     {
-        c = index(buf, '\n');
+        c = index(buf, LINETERM);
         if (c)
             *c=0;
 #ifdef DEBUG
@@ -155,7 +179,11 @@ struct w51info *ifparse()
        }
        else if( strcmp(tok, "phyaddr") == 0 )
        {
+#ifdef _CMOC_VERSION_
+	   r->phyaddr = hexi16(data);
+#else
            sscanf(data, "$%04x", &r->phyaddr);
+#endif
            i++;
        }
  
@@ -163,7 +191,9 @@ struct w51info *ifparse()
     fclose(f);
     if (i != 6)
     {
+#ifndef _CMOC_VERSION_
         free(r);
+#endif
         r = NULL;
     }
     return r;

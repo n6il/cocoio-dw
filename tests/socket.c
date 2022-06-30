@@ -1,6 +1,11 @@
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#include <cmoc.h>
+#else
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#endif
 #include "w5100s.h"
 #include "socket.h"
 
@@ -123,7 +128,7 @@ uint16_t port;
 #ifdef DEBUG
     printf("set: sock=(%d) SK_DPORTR0=(%04x) v=(%04x)\n", sock, SKPTRREG(sockp, SK_DPORTR0), port);
 #endif
-    rgblkset(&port, SKPTRREG(sockp, SK_DPORTR0), 2);
+    rgblkset((uint8_t *)&port, SKPTRREG(sockp, SK_DPORTR0), 2);
 }
 
 int connect(sock, ip, port)
@@ -145,7 +150,7 @@ uint16_t port;
 #ifdef DEBUG
         printf("set: sock=(%d) SK_PORTR0=(%04x) v=(%04x)\n", sock, SKPTRREG(sockp, SK_PORTR0), sport);
 #endif
-        rgblkset(&sport, SKPTRREG(sockp, SK_PORTR0), 2);
+        rgblkset((uint8_t *)&sport, SKPTRREG(sockp, SK_PORTR0), 2);
 //    }
 
     /* Open the socket on the card side */
@@ -221,7 +226,7 @@ int flags;
     rsize = 0;
     while(rsize == 0)
     {
-        rgblkget(&rsize, SKPTRREG(sockp, SK_RX_RSR0), 2);
+        rgblkget((uint8_t *)&rsize, SKPTRREG(sockp, SK_RX_RSR0), 2);
 #ifdef DEBUG
     printf("get: s=(%d) SK_RX_RSR=(%04x) rsize=(%d)\n", s,
         SKPTRREG(sockp, SK_RX_RSR0), rsize);
@@ -231,7 +236,7 @@ int flags;
     len = min(len, rsize);
 
     /* Get current pointer in receive buffer */
-    rgblkget(&rptr, SKPTRREG(sockp, SK_RX_RD0), 2);
+    rgblkget((uint8_t *)&rptr, SKPTRREG(sockp, SK_RX_RD0), 2);
     /* Offset into receive buffer */
     roffset = rptr & SKBUFMASK;
 
@@ -249,9 +254,9 @@ int flags;
     }
 
     /* Advance pointer */
-    rgblkget(&rptr, SKPTRREG(sockp, SK_RX_RD0), 2);
+    rgblkget((uint8_t *)&rptr, SKPTRREG(sockp, SK_RX_RD0), 2);
     rptr += len;
-    rgblkset(&rptr, SKPTRREG(sockp, SK_RX_RD0), 2);
+    rgblkset((uint8_t *)&rptr, SKPTRREG(sockp, SK_RX_RD0), 2);
 
     /* Tell card we received some data */
     cbuf = SK_CR_RECV;
@@ -279,13 +284,13 @@ int flags;
     /* Loop until TX Buffer has space */
     wsize = 0;
     while (wsize < len)
-        rgblkget(&wsize, SKPTRREG(sockp, SK_TX_FSR0), 2);
+        rgblkget((uint8_t *)&wsize, SKPTRREG(sockp, SK_TX_FSR0), 2);
 #ifdef DEBUG
     printf("get: s=(%d) SK_TX_FSR=(%04x) wsize=(%d)\n", s, SKPTRREG(sockp, SK_TX_FSR0), wsize);
 #endif
 
     /* Get current pointer in TX buffer */
-    rgblkget(&wptr, SKPTRREG(sockp, SK_TX_WR0), 2);
+    rgblkget((uint8_t *)&wptr, SKPTRREG(sockp, SK_TX_WR0), 2);
 #ifdef DEBUG
     printf("get: s=(%d) SK_TX_WR=(%04x) v=(%04x)\n", s, SKPTRREG(sockp, SK_TX_WR0), wptr);
 #endif
@@ -315,7 +320,7 @@ int flags;
     }
 
     /* Advance pointer */
-    rgblkget(&wptr, SKPTRREG(sockp, SK_TX_WR0), 2);
+    rgblkget((uint8_t *)&wptr, SKPTRREG(sockp, SK_TX_WR0), 2);
 #ifdef DEBUG
     printf("get: s=(%d) SK_TX_WR=(%04x) v=(%04x)\n", s, SKPTRREG(sockp, SK_TX_WR0), wptr);
 #endif
@@ -323,7 +328,7 @@ int flags;
 #ifdef DEBUG
     printf("set: s=(%d) SK_TX_WR=(%04x) v=(%04x)\n", s, SKPTRREG(sockp, SK_TX_WR0), wptr);
 #endif
-    rgblkset(&wptr, SKPTRREG(sockp, SK_TX_WR0), 2);
+    rgblkset((uint8_t *)&wptr, SKPTRREG(sockp, SK_TX_WR0), 2);
 
     /* Send command */
     cbuf = SK_CR_SEND;

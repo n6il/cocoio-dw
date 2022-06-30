@@ -1,5 +1,11 @@
+#ifdef _CMOC_VERSION_
+#include <coco.h>
+#include <cmoc.h>
+#include "cmoclib/system.h"
+#else
 #include <stdio.h>
 #include <memory.h>
+#endif
 #include "ifparse.h"
 #include "socket.h"
 
@@ -10,9 +16,13 @@ int usage()
 }
 
 #define BUFLEN 80
+#ifdef _CMOC_VERSION_
+int main()
+#else
 int main(argc, argv)
 int argc;
 char **argv;
+#endif
 {
     char *str, *ips, *buf2;
     char ip[4], buf[BUFLEN+1];
@@ -20,6 +30,11 @@ char **argv;
     uint16_t port;
     struct udppktin *upi;
 
+#ifdef _CMOC_VERSION_
+    int argc;
+    char **argv;
+    getcmdln(&argc, &argv);
+#endif
     if (argc < 3)
         usage();
 
@@ -61,7 +76,7 @@ char **argv;
         memset(buf, 0, BUFLEN);
         sprintf(buf, "%d:%s", i, str);
         len = strlen(buf);
-        rv = send(sock, buf, len);
+        rv = send(sock, buf, len, 0);
         if (rv != len)
         {
             fprintf(stderr, "Send Error: %x\n", rv);
@@ -73,7 +88,7 @@ char **argv;
         if (type == SOCK_DGRAM)
             len += sizeof(struct udppktin);
         memset(buf, 0, BUFLEN);
-        rv = recv(sock, buf, len);
+        rv = recv(sock, buf, len, 0);
         if (rv != len)
         {
             fprintf(stderr, "Recv Error: %x\n", rv);
@@ -82,7 +97,7 @@ char **argv;
         }
         if (type == SOCK_DGRAM)
         {
-            upi = buf;
+            upi = (struct udppktin *)buf;
             buf2 = buf+sizeof(struct udppktin);
 #ifdef DEBUG
             fprintf(stderr, "Recv: len=(%d) buf=(%04x) upi=(%04x) buf2=(%04x)\n"    ,
