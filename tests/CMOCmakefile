@@ -1,0 +1,43 @@
+CC = cmoc
+AS = lwasm
+AR = lwar
+LD = lwlink
+
+OBJS = ifparse.o ccio.o ping.o echou.o buffest.o ntpdate.o
+IFPARSE = ifparse.bin
+BINS = ccio.bin ping.bin echou.bin bufftest.bin # ntpdate
+
+CMOCLIB = libcmoclib.a
+CMOCLIBF = -Lcmoclib -lcmoclib
+CCIOLIB = libcciolib.a
+CCIOLIBF = -L. -lcciolib
+LIBS = $(CMOCLIB) $(CCIOLIB)
+LIBSF = $(CCIOLIBF) $(CMOCLIBF)
+CCIOOBJS = ifparse.o w5100s.o socket.o
+
+all: cmoclib $(IFPARSE) $(BINS)
+
+libcmoclib.a:
+	make -C cmoclib -f CMOCmakefile
+
+libcciolib.a: $(CCIOOBJS)
+	$(AR) --create $@ $(CCIOOBJS)
+
+ifparse.bin: ifparse.c $(CMOCLIB)
+	$(CC) -DDRIVER=1 -o $@ $< $(CMOCLIBF)
+
+ccio.bin: ccio.o $(LIBS)
+	$(CC) -o $@ $< $(LIBSF)
+
+ping.bin: ping.o $(LIBS)
+	$(CC) -o $@ $< $(LIBSF)
+
+echou.bin: echou.o $(LIBS)
+	$(CC) -o $@ $< $(LIBSF)
+
+bufftest.bin: bufftest.o $(LIBS)
+	$(CC) -o $@ $< $(LIBSF)
+
+clean:
+	rm -f $(CCIOLIB) $(CCIOOBJS) $(OBJS) $(IFPARSE) $(BINS)
+	make -C cmoclib -f CMOCmakefile clean
